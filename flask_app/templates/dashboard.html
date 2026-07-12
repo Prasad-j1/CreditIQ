@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreditIQ | AI-Powered Credit Risk Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --primary: #2952E3;
+    --primary-dark: #1E3FBF;
+    --accent: #10B981;
+    --text: #1E293B;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --shadow-sm: 0 2px 10px rgba(30, 41, 59, 0.05);
+    --shadow-md: 0 10px 30px rgba(30, 41, 59, 0.08);
+    --shadow-lg: 0 20px 50px rgba(41, 82, 227, 0.14);
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
+
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+  a { text-decoration: none; color: inherit; }
+  ul { list-style: none; }
+
+  /* ============ NAVBAR ============ */
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(248, 250, 252, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .navbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 1.25rem; color: var(--text); }
+  .logo-mark {
+    width: 30px; height: 30px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    flex-shrink: 0;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+  }
+  .nav-links a:not(.nav-cta) {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    position: relative;
+    padding: 4px 0;
+    transition: color .15s ease;
+  }
+  .nav-links a:not(.nav-cta):hover { color: var(--primary); }
+  .nav-links a:not(.nav-cta)::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -2px;
+    width: 0; height: 2px;
+    background: var(--primary);
+    transition: width .2s ease;
+  }
+  .nav-links a:not(.nav-cta):hover::after { width: 100%; }
+
+  .nav-icons { display: flex; align-items: center; gap: 16px; }
+  .nav-icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: all .15s ease;
+    font-size: 1rem;
+  }
+  .nav-icon-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+
+  .nav-cta {
+    background: var(--primary);
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 6px 16px rgba(41, 82, 227, 0.25);
+    transition: all .15s ease;
+  }
+  .nav-cta:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(41, 82, 227, 0.32); }
+
+  .menu-toggle { display: none; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text); }
+
+  /* ============ HERO ============ */
+  .hero { padding: 90px 0 70px; }
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(41, 82, 227, 0.08);
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 1.08rem;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin-bottom: 32px;
+  }
+
+  .hero-ctas { display: flex; align-items: center; gap: 18px; margin-bottom: 40px; flex-wrap: wrap; }
+
+  .btn-hero-primary {
+    position: relative;
+    overflow: hidden;
+    background: var(--primary);
+    color: white;
+    padding: 16px 30px;
+    border-radius: 13px;
+    font-weight: 600;
+    font-size: 0.98rem;
+    box-shadow: var(--shadow-lg);
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-hero-primary:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 24px 46px rgba(41,82,227,0.24); }
+  .btn-hero-primary:active { transform: translateY(-1px) scale(0.98); }
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    transform: scale(0);
+    animation: ripple-anim 0.6s ease-out;
+    pointer-events: none;
+  }
+  @keyframes ripple-anim { to { transform: scale(3); opacity: 0; } }
+
+  .btn-hero-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 16px 8px;
+    transition: gap .15s ease;
+  }
+  .btn-hero-secondary:hover { gap: 12px; color: var(--primary); }
+
+  .hero-trust-badges { display: flex; flex-wrap: wrap; gap: 10px; }
+  .trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    box-shadow: var(--shadow-sm);
+  }
+  .trust-badge .tb-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  /* ---- Hero right: dashboard mockup ---- */
+  .hero-right { position: relative; display: flex; align-items: center; justify-content: center; min-height: 440px; }
+
+  .mockup-card {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 30px 28px;
+    z-index: 2;
+  }
+  .mockup-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+  .mockup-header span { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .mockup-live { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; }
+  .mockup-live .pulse-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(16,185,129,0.6);
+    animation: pulse 1.8s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(16,185,129,0); }
+    100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+  }
+
+  .gauge-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 80px; }
+  .gauge-svg { transform: rotate(-90deg); }
+  .gauge-bg { fill: none; stroke: #EDF1F7; stroke-width: 12; }
+  .gauge-fg {
+    fill: none; stroke: url(#gaugeGradient); stroke-width: 12; stroke-linecap: round;
+    stroke-dasharray: 377;
+    stroke-dashoffset: 377;
+    animation: gauge-fill 1.8s cubic-bezier(.3,.8,.4,1) 0.4s forwards;
+  }
+  @keyframes gauge-fill { to { stroke-dashoffset: 90; } }
+  .gauge-center { position: absolute; top: 91%; left: 52%; transform: translate(-50%, -50%); text-align: center; }
+  .gauge-score { font-size: 2.1rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; color: var(--text); }
+  .gauge-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+  .gauge-container { position: relative; width: 160px; height: 90px; }
+
+  .mockup-status {
+    text-align: center;
+    background: rgba(16,185,129,0.08);
+    color: #047857;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 9px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+  }
+
+  .mockup-mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mini-stat { background: #FBFBFD; border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+  .mini-stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; margin-bottom: 4px; }
+  .mini-stat-value { font-size: 1rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+
+  .float-chip {
+    position: absolute;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: var(--shadow-md);
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    z-index: 3;
+    animation: float-chip 4.5s ease-in-out infinite;
+  }
+  .chip-1 { top: 0%; left: -8%; color: #047857; animation-delay: 0s; }
+  .chip-2 { bottom: 12%; right: -10%; color: var(--primary); animation-delay: 1.2s; }
+  .chip-3 { top: 46%; right: -14%; color: #B45309; animation-delay: 2.4s; }
+  @keyframes float-chip {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  .blob {
+    position: absolute;
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(41,82,227,0.12), rgba(16,185,129,0.06) 60%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+    filter: blur(10px);
+  }
+
+  /* ============ SECTION HEADERS (shared) ============ */
+  .section-head { text-align: center; max-width: 620px; margin: 0 auto 50px; }
+  .section-head .eyebrow { margin-bottom: 16px; }
+  .section-head h2 { font-size: 2.1rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.01em; }
+  .section-head p { color: var(--text-muted); font-size: 1rem; }
+
+  section { padding: 80px 0; }
+
+  /* ============ TECH STRIP ============ */
+  .tech-strip { padding: 50px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .tech-strip-label { text-align: center; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 26px; }
+  .tech-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+  .tech-badge {
+    display: flex; align-items: center; gap: 9px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 11px 18px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .tech-badge:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+  .tech-badge .tb-icon { font-size: 1.05rem; }
+
+  /* ============ PERFORMANCE CARDS ============ */
+  .perf-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .perf-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 28px 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .perf-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+  .perf-icon {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    background: rgba(41, 82, 227, 0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+  .perf-card h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+  .perf-card .perf-title { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .perf-card p { font-size: 0.84rem; color: var(--text-muted); }
+
+  /* ============ WHY CHOOSE ============ */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .why-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 30px 26px;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .why-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: rgba(41,82,227,0.25); }
+  .why-icon {
+    width: 48px; height: 48px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, rgba(41,82,227,0.1), rgba(16,185,129,0.1));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+  }
+  .why-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+  .why-card p { font-size: 0.86rem; color: var(--text-muted); }
+
+  /* ============ HOW IT WORKS ============ */
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .step-card { position: relative; text-align: center; padding: 0 16px; }
+  .step-connector {
+    position: absolute;
+    top: 34px;
+    left: 55%;
+    width: 90%;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--border) 0 8px, transparent 8px 14px);
+    z-index: 0;
+  }
+  .step-card:last-child .step-connector { display: none; }
+  .step-number {
+    position: relative;
+    z-index: 1;
+    width: 68px; height: 68px;
+    margin: 0 auto 20px;
+    border-radius: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .step-card:hover .step-number { transform: translateY(-5px) scale(1.05); box-shadow: var(--shadow-md); border-color: var(--primary); }
+  .step-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+  .step-card p { font-size: 0.82rem; color: var(--text-muted); }
+
+  /* ============ FINAL CTA ============ */
+  .final-cta {
+    text-align: center;
+    background: linear-gradient(135deg, var(--primary), #1B2E8F);
+    border-radius: 28px;
+    padding: 64px 40px;
+    color: white;
+    margin: 0 24px;
+    max-width: 1132px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .final-cta h2 { font-size: 2rem; margin-bottom: 14px; }
+  .final-cta p { color: rgba(255,255,255,0.8); max-width: 480px; margin: 0 auto 30px; }
+  .btn-cta-white {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; color: var(--primary);
+    padding: 16px 32px; border-radius: 13px;
+    font-weight: 700; font-size: 0.98rem;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+  }
+  .btn-cta-white:hover { transform: translateY(-3px); }
+
+  /* ============ FOOTER ============ */
+  footer { padding: 56px 0 30px; border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 34px;
+  }
+  .footer-brand p { color: var(--text-muted); font-size: 0.85rem; max-width: 280px; margin-top: 10px; }
+  .footer-stack { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .footer-stack span { font-size: 0.72rem; color: var(--text-muted); background: var(--card); border: 1px solid var(--border); padding: 4px 10px; border-radius: 8px; }
+  .footer-links { display: flex; gap: 14px; }
+  .footer-icon-btn {
+    width: 40px; height: 40px;
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s ease;
+    color: var(--text-muted);
+  }
+  .footer-icon-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-3px); }
+  .footer-bottom { text-align: center; font-size: 0.8rem; color: var(--text-muted); padding-top: 24px; border-top: 1px solid var(--border); }
+
+  /* ============ SCROLL REVEAL ============ */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 980px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-right { min-height: 360px; margin-top: 30px; }
+    .perf-grid, .why-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps-row { grid-template-columns: repeat(2, 1fr); gap: 40px 0; }
+    .step-connector { display: none; }
+  }
+  @media (max-width: 720px) {
+    .nav-links { position: fixed; top: 68px; left: 0; right: 0; background: var(--bg); flex-direction: column; padding: 20px 24px; border-bottom: 1px solid var(--border); gap: 18px; display: none; }
+    .nav-links.open { display: flex; }
+    .menu-toggle { display: block; }
+    .hero h1 { font-size: 2.1rem; }
+    .perf-grid, .why-grid { grid-template-columns: 1fr; }
+    .steps-row { grid-template-columns: 1fr; }
+    .final-cta { margin: 0 16px; padding: 44px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="#home" class="logo"><span class="logo-mark"></span>CreditIQ</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#technology">Technology</a></li>
+      <li><a href="/predict" class="nav-cta">Start Analysis</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="https://github.com" target="_blank" class="nav-icon-btn" aria-label="GitHub" title="GitHub">⌥</a>
+      <a href="https://linkedin.com" target="_blank" class="nav-icon-btn" aria-label="LinkedIn" title="LinkedIn">in</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <div class="container hero-inner">
+    <div class="hero-left">
+      <div class="eyebrow"><span class="dot"></span>End-to-End Machine Learning System</div>
+      <h1>AI-Powered <span class="highlight">Credit Risk</span> Assessment</h1>
+      <p class="hero-sub">CreditIQ uses a fully explainable machine learning pipeline — trained on real financial data — to predict loan default risk in real time and explain exactly why.</p>
+
+      <div class="hero-ctas">
+        <a href="/predict" class="btn-hero-primary" id="ctaBtn">Start Credit Risk Analysis →</a>
+        <a href="#how-it-works" class="btn-hero-secondary">See how it works →</a>
+      </div>
+
+      <div class="hero-trust-badges">
+        <span class="trust-badge"><span class="tb-dot"></span>Machine Learning</span>
+        <span class="trust-badge"><span class="tb-dot"></span>Explainable AI</span>
+        <span class="trust-badge"><span class="tb-dot"></span>End-to-End Pipeline</span>
+        <span class="trust-badge"><span class="tb-dot"></span>Real-Time Prediction</span>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="blob"></div>
+      <div class="float-chip chip-1">✅ Good Credit — 82%</div>
+      <div class="float-chip chip-2">📊 ROC-AUC 0.76</div>
+      <div class="float-chip chip-3">⚡ 40ms Response</div>
+
+      <div class="mockup-card">
+        <div class="mockup-header">
+          <span>Risk Assessment</span>
+          <span class="mockup-live"><span class="pulse-dot"></span>Live Model</span>
+        </div>
+
+        <div class="gauge-wrap">
+          <div class="gauge-container">
+            <svg class="gauge-svg" width="160" height="160" viewBox="0 0 140 140">
+              <defs>
+                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#2952E3"/>
+                  <stop offset="100%" stop-color="#10B981"/>
+                </linearGradient>
+              </defs>
+              <circle class="gauge-bg" cx="70" cy="70" r="60"/>
+              <circle class="gauge-fg" cx="70" cy="70" r="60"/>
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-score">76%</div>
+              <div class="gauge-label">Model AUC</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mockup-status">Low Risk Profile Detected</div>
+
+        <div class="mockup-mini-stats">
+          <div class="mini-stat">
+            <div class="mini-stat-label">Model</div>
+            <div class="mini-stat-value">Logistic Reg.</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-label">Accuracy</div>
+            <div class="mini-stat-value">73.5%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TECH STRIP ============ -->
+<section class="tech-strip" id="technology">
+  <div class="container">
+    <div class="tech-strip-label">Built With</div>
+    <div class="tech-badges">
+      <span class="tech-badge"><span class="tb-icon">🐍</span>Python</span>
+      <span class="tech-badge"><span class="tb-icon">🌐</span>Flask</span>
+      <span class="tech-badge"><span class="tb-icon">🔬</span>Scikit-Learn</span>
+      <span class="tech-badge"><span class="tb-icon">🐼</span>Pandas</span>
+      <span class="tech-badge"><span class="tb-icon">🔢</span>NumPy</span>
+      <span class="tech-badge"><span class="tb-icon">🧠</span>Machine Learning</span>
+      <span class="tech-badge"><span class="tb-icon">📈</span>Logistic Regression</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PERFORMANCE ============ -->
+<section id="performance">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow"><span class="dot"></span>Model Performance</div>
+      <h2>Built on Real, Validated Results</h2>
+      <p>Every number below comes from actual cross-validated evaluation — not placeholders.</p>
+    </div>
+
+    <div class="perf-grid">
+      <div class="perf-card reveal">
+        <div class="perf-icon">📊</div>
+        <h3>0.76</h3>
+        <div class="perf-title">ROC-AUC Score</div>
+        <p>Measured via 5-fold cross-validation across the full dataset.</p>
+      </div>
+      <div class="perf-card reveal">
+        <div class="perf-icon">🎯</div>
+        <h3>73.5%</h3>
+        <div class="perf-title">Test Accuracy</div>
+        <p>Evaluated on a held-out, previously unseen test set.</p>
+      </div>
+      <div class="perf-card reveal">
+        <div class="perf-icon">🔍</div>
+        <h3>100%</h3>
+        <div class="perf-title">Explainable AI</div>
+        <p>Every prediction includes the real factors that influenced it.</p>
+      </div>
+      <div class="perf-card reveal">
+        <div class="perf-icon">⚙️</div>
+        <h3>1</h3>
+        <div class="perf-title">Unified Pipeline</div>
+        <p>Preprocessing, encoding, and prediction bundled into one object.</p>
+      </div>
+      <div class="perf-card reveal">
+        <div class="perf-icon">⚡</div>
+        <h3>&lt;100ms</h3>
+        <div class="perf-title">Fast Prediction</div>
+        <p>Lightweight Logistic Regression model, optimized for speed.</p>
+      </div>
+      <div class="perf-card reveal">
+        <div class="perf-icon">📱</div>
+        <h3>100%</h3>
+        <div class="perf-title">Responsive Design</div>
+        <p>Works cleanly across desktop, tablet, and mobile devices.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY CHOOSE ============ -->
+<section id="about">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow"><span class="dot"></span>Why CreditIQ</div>
+      <h2>Designed Like a Real Financial Product</h2>
+      <p>Not a notebook demo — a complete, production-style ML application.</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-icon">🧩</div>
+        <h3>Explainable AI</h3>
+        <p>Every prediction comes with plain-language reasoning, not just a number.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🏗️</div>
+        <h3>Professional ML Pipeline</h3>
+        <p>Preprocessing and modeling bundled into a single, leak-proof pipeline.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">⚡</div>
+        <h3>Fast Prediction</h3>
+        <p>Optimized for near-instant results, even on modest hardware.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🎨</div>
+        <h3>Modern Interface</h3>
+        <p>A clean, guided experience built for real users, not just developers.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🛡️</div>
+        <h3>Reliable Assessment</h3>
+        <p>Validated through cross-validation and hyperparameter tuning.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-icon">🚀</div>
+        <h3>Production-Ready</h3>
+        <p>Built with Flask, structured for real deployment, not just demos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how-it-works">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow"><span class="dot"></span>The Process</div>
+      <h2>How CreditIQ Works</h2>
+      <p>From raw input to a risk decision — in four simple steps.</p>
+    </div>
+
+    <div class="steps-row">
+      <div class="step-card reveal">
+        <div class="step-connector"></div>
+        <div class="step-number">📝</div>
+        <h3>Enter Details</h3>
+        <p>Applicant fills in financial and personal information.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-connector"></div>
+        <div class="step-number">⚙️</div>
+        <h3>AI Preprocessing</h3>
+        <p>The pipeline automatically scales and encodes the input.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-connector"></div>
+        <div class="step-number">🧠</div>
+        <h3>ML Prediction</h3>
+        <p>The trained model calculates a default probability.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">📋</div>
+        <h3>Risk & Recommendation</h3>
+        <p>A clear risk category and explanation is generated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section>
+  <div class="container">
+    <div class="final-cta reveal">
+      <h2>Ready to see it in action?</h2>
+      <p>Run a real credit risk analysis using the trained model — takes less than a minute.</p>
+      <a href="/predict" class="btn-cta-white">Start Credit Risk Analysis →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#home" class="logo"><span class="logo-mark"></span>CreditIQ</a>
+        <p>An end-to-end machine learning system for credit default risk prediction — built from raw data to deployed application.</p>
+        <div class="footer-stack">
+          <span>Python</span><span>Flask</span><span>Scikit-Learn</span><span>Pandas</span>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com" target="_blank" class="footer-icon-btn" aria-label="GitHub" title="GitHub">⌥</a>
+        <a href="https://linkedin.com" target="_blank" class="footer-icon-btn" aria-label="LinkedIn" title="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 CreditIQ. Built as a portfolio machine learning project.</div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // Scroll reveal animation
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Button ripple effect
+  document.getElementById('ctaBtn').addEventListener('click', function(e) {
+    const btn = e.currentTarget;
+    const circle = document.createElement('span');
+    const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+    circle.style.width = circle.style.height = diameter + 'px';
+    circle.style.left = (e.clientX - btn.getBoundingClientRect().left - diameter / 2) + 'px';
+    circle.style.top = (e.clientY - btn.getBoundingClientRect().top - diameter / 2) + 'px';
+    circle.classList.add('ripple');
+    const existing = btn.querySelector('.ripple');
+    if (existing) existing.remove();
+    btn.appendChild(circle);
+  });
+</script>
+
+</body>
+</html>
