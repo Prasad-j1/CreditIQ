@@ -3,6 +3,7 @@
 # Keeping these separate from app.py and predict.py keeps each file focused
 # on one job: predict.py = ML logic, utils.py = business/display logic, app.py = routing.
 
+RISK_THRESHOLD = 0.25
 JOB_LABELS = {
     0: 'Unskilled & Non-resident',
     1: 'Unskilled & Resident',

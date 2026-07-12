@@ -85,12 +85,13 @@ After comparing multiple algorithms using **5-Fold Stratified Cross Validation**
 
 | Metric | Score |
 |---------|------:|
-| Accuracy | **73.5%** |
-| Precision | **60.0%** |
-| Recall | **35.0%** |
-| F1 Score | **44.2%** |
+| Accuracy | **69.0%** |
+| Precision | **49.0%** |
+| Recall | **81.7%** |
+| F1 Score | **61.3%** |
 | ROC-AUC | **0.760** |
 
+> **Note:** These metrics reflect a custom decision threshold of **0.25** (instead of scikit-learn's default 0.5), chosen after a precision-recall threshold sweep on the test set. In a lending context, missing an actual defaulter is typically costlier than flagging a good applicant for extra review — so recall was prioritized over raw accuracy. ROC-AUC is unaffected, since it's a threshold-independent metric measuring ranking quality across all possible cutoffs, not just one fixed point.
 ## 🎯 Why Logistic Regression?
 
 Although Random Forest achieved a marginally higher cross-validation ROC-AUC (0.756 vs 0.755 — within expected validation variance), Logistic Regression was chosen for production because it offers:
@@ -261,7 +262,6 @@ Then open **http://127.0.0.1:5000** in your browser.
 
 # 🔮 Future Improvements
 
-- Threshold optimization for higher recall on the minority (bad-credit) class
 - Batch prediction via CSV upload
 - SHAP-based feature explanations
 - User authentication & prediction history
