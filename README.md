@@ -18,15 +18,15 @@ Unlike notebook-only projects, **CreditIQ** demonstrates the complete machine le
 # 📸 Application Preview
 
 ## 🏠 Dashboard
-![Dashboard](images/dashboard.png)
+![Dashboard](images/Dashboard.png)
 ---
 
 ## 📝 Prediction Page
-![Prediction Page](images/prediction-page.png)
+![Prediction Page](images/Prediction_Page.png)
 ---
 
 ## 🎯 Prediction Results
-![Prediction Results](images/prediction-result.png)
+![Prediction Results](images/Prediction_Result.png)
 
 ---
 # 🏆 Project Highlights
